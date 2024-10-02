@@ -37,14 +37,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Serenity Rest Assured for API testing 
-        <dependency>
-            <groupId>net.serenity-bdd</groupId>
-            <artifactId>serenity-rest-assured</artifactId>
-            <version>${serenity.version}</version>
-        </dependency>
-        -->
-
 		<dependency>
 			<groupId>net.serenity-bdd</groupId>
 			<artifactId>serenity-screenplay-rest</artifactId>
@@ -156,7 +148,7 @@
 				</configuration>
 			</plugin>
 			
-						<plugin>
+			<plugin>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<version>${maven.failsafe.version}</version>
 				<configuration>
