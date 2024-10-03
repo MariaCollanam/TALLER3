@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="ApiProductoV1.base.EliminarProductoTest" skipped="0" tests="1" time="0.13" timestamp="2024-10-02 07:38:51"><testcase classname="ApiProductoV1.base.EliminarProductoTest" name="Eliminar un producto previamente creado de manera exitosa"/></testsuite>

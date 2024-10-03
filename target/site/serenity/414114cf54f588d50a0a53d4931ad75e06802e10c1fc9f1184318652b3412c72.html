@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>Features</title>
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="57x57" href="apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="bootstrap-icons/bootstrap-icons.css">
+<!-- JQuery -->
+<script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script><!-- Required Stylesheets -->
+<link href="bootstrap-treeview/dist/bootstrap-treeview.min.css" rel="stylesheet">
+
+<!-- Required Javascript -->
+<script src="bootstrap-treeview/dist/bootstrap-treeview.min.js"></script><!-- DataTables -->
+<link type="text/css" href="datatables/1.13.1/datatables.min.css" rel="stylesheet" />
+<script type="text/javascript" src="datatables/1.13.1/datatables.min.js"></script>
+<script type="text/javascript" src="datatables/1.13.1/time-elapsed-dhms.js"></script>
+
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+
+<script>
+    jQuery.fn.dataTable.ext.type.order['time-elapsed-dhms-pre'] = function(data) {
+
+        var matches = data.match(/^(\d+(?:\.\d+)?)\s*([a-z]+)/i);
+        var multipliers = {
+            ms: 1,
+            s: 1000,
+            m: 60000,
+            h: 3600000,
+            d: 86400000
+        };
+
+        if (matches) {
+            var multiplier = multipliers[matches[2].toLowerCase()];
+            return parseFloat(matches[1]) * multiplier;
+        } else {
+            return -1;
+        };
+    };
+</script>
+<link rel="stylesheet" href="css/core.css"/>
+<link rel="stylesheet" href="css/link.css"/>
+<link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet"/>
+<!--CHART.JS-->
+<script src="chartjs/chart.js"></script>
+<script src="chartjs/chartjs-plugin-datalabels@2.0.0.min.js"></script>
+<script src="chartjs/patternomaly.min.js"></script>
+<script>
+    // Register the plugin to all charts:
+    Chart.register(ChartDataLabels);
+</script>
+<!-- JQuery-UI -->
+<link type="text/css" href="jqueryui/1.11.2-start/jquery-ui.min.css" rel="Stylesheet" />
+<script type="text/javascript" src="jqueryui/1.11.2-start/jquery-ui.min.js"></script><!-- DataTables -->
+<link type="text/css" href="datatables/1.13.1/datatables.min.css" rel="stylesheet" />
+<script type="text/javascript" src="datatables/1.13.1/datatables.min.js"></script>
+<script type="text/javascript" src="datatables/1.13.1/time-elapsed-dhms.js"></script>
+
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+
+<script>
+    jQuery.fn.dataTable.ext.type.order['time-elapsed-dhms-pre'] = function(data) {
+
+        var matches = data.match(/^(\d+(?:\.\d+)?)\s*([a-z]+)/i);
+        var multipliers = {
+            ms: 1,
+            s: 1000,
+            m: 60000,
+            h: 3600000,
+            d: 86400000
+        };
+
+        if (matches) {
+            var multiplier = multipliers[matches[2].toLowerCase()];
+            return parseFloat(matches[1]) * multiplier;
+        } else {
+            return -1;
+        };
+    };
+</script>
+
+
+
+
+    <script>
+
+        $(document).ready(function () {
+
+            $("#scenario-results").DataTable({
+                "order": [[0, "asc",], [3, "asc",]],
+                "language": {
+                    searchPlaceholder: "Filter",
+                    search: ""
+                },
+                columnDefs: [
+                    {type: 'time-elapsed-dhms', targets: 4}
+                ]
+            })
+            $("#manual-scenario-results").DataTable({
+                "order": [[0, "asc",], [1, "asc",]],
+                "language": {
+                    searchPlaceholder: "Filter",
+                    search: ""
+                },
+            })
+
+            $('.example-table table').DataTable({
+                searching: false,
+                ordering: false,
+                paging: false,
+                info: false
+            });
+
+            $('.example-table-in-scenario table').DataTable({
+                searching: false,
+                ordering: false,
+                paging: false,
+                info: false
+            });
+
+            $('#evidence-table').DataTable(
+                {
+                    searching: false,
+                    ordering: false,
+                    paging: false,
+                    info: false
+                }
+            );
+
+
+            $(".scenario-docs .card-body table").wrap("<div class='table-responsive'></div>");
+
+            $("#requirements-tabs").tabs();
+            $("#test-tabs").tabs();
+
+            var requirementsTree = [{"text":"Base","type":"feature","href":"414114cf54f588d50a0a53d4931ad75e06802e10c1fc9f1184318652b3412c72.html","nodes":[{"text":"Requisito 1. Crear un nuevo producto usando la api /api/v1/product/","type":"feature","href":"58133d5bd5179c08a368ceba89c772ae50181f6387fadae766edeea8283fa21d.html","nodes":[],"selectable":false,"tags":["\u003ca href\u003d\u0027##beforetable\u0027\u003e\u003ci class\u003d\u0027bi bi-check-circle-fill success-icon \u0027 title\u003d\u0027SUCCESS\u0027\u003e\u003c/i\u003e\u003c/a\u003e","\u003cspan class\u003d\u0027feature-count\u0027\u003e2 scenarios\u003c/span\u003e, \u003cspan class\u003d\u0027feature-count\u0027\u003e2 test cases\u003c/span\u003e"]},{"text":"Requisito 2. Actualizar un producto previamente creado usando la api /api/v1/product/","type":"feature","href":"d70d86df4cdf09046ba2950b67bb395ff16dc1c3578306e6d11ec4a74b0ea4da.html","nodes":[],"selectable":false,"tags":["\u003ca href\u003d\u0027##beforetable\u0027\u003e\u003ci class\u003d\u0027bi bi-check-circle-fill success-icon \u0027 title\u003d\u0027SUCCESS\u0027\u003e\u003c/i\u003e\u003c/a\u003e","\u003cspan class\u003d\u0027feature-count\u0027\u003e1 scenario\u003c/span\u003e, \u003cspan class\u003d\u0027feature-count\u0027\u003e1 test case\u003c/span\u003e"]},{"text":"Requisito 3. Eliminar un producto previamente creado usando la api /api/v1/product/","type":"feature","href":"0386cf54170f285b7617a24c182b968cf3fbf144cd6e8aa9f4aa945d679a6698.html","nodes":[],"selectable":false,"tags":["\u003ca href\u003d\u0027##beforetable\u0027\u003e\u003ci class\u003d\u0027bi bi-check-circle-fill success-icon \u0027 title\u003d\u0027SUCCESS\u0027\u003e\u003c/i\u003e\u003c/a\u003e","\u003cspan class\u003d\u0027feature-count\u0027\u003e1 scenario\u003c/span\u003e, \u003cspan class\u003d\u0027feature-count\u0027\u003e1 test case\u003c/span\u003e"]},{"text":"Requisito 4. Error al crear nuevo producto usando la api /api/v1/product/","type":"feature","href":"d5151225bd6c48fc81b94df7e74ef06e9fb29deff286e0db1b4e48333b12a523.html","nodes":[],"selectable":false,"tags":["\u003ca href\u003d\u0027##beforetable\u0027\u003e\u003ci class\u003d\u0027bi bi-check-circle-fill success-icon \u0027 title\u003d\u0027SUCCESS\u0027\u003e\u003c/i\u003e\u003c/a\u003e","\u003cspan class\u003d\u0027feature-count\u0027\u003e3 scenarios\u003c/span\u003e, \u003cspan class\u003d\u0027feature-count\u0027\u003e3 test cases\u003c/span\u003e"]},{"text":"Requisito 5. Actualizar un producto fallido previamente creado usando la api /api/v1/product/","type":"feature","href":"fb6ec528052fabdc9aae3aba445d5eca801ce80d9f62c40b6f97124599329093.html","nodes":[],"selectable":false,"tags":["\u003ca href\u003d\u0027##beforetable\u0027\u003e\u003ci class\u003d\u0027bi bi-check-circle-fill success-icon \u0027 title\u003d\u0027SUCCESS\u0027\u003e\u003c/i\u003e\u003c/a\u003e","\u003cspan class\u003d\u0027feature-count\u0027\u003e1 scenario\u003c/span\u003e, \u003cspan class\u003d\u0027feature-count\u0027\u003e1 test case\u003c/span\u003e"]},{"text":"Requisito 6. Eliminar un producto Fallido previamente creado usando la api /api/v1/product/","type":"feature","href":"7904811ba75c2e59b671b2d24789ae7c714d3ecaebd84f5a7e4babe0d5deffd4.html","nodes":[],"selectable":false,"tags":["\u003ca href\u003d\u0027##beforetable\u0027\u003e\u003ci class\u003d\u0027bi bi-check-circle-fill success-icon \u0027 title\u003d\u0027SUCCESS\u0027\u003e\u003c/i\u003e\u003c/a\u003e","\u003cspan class\u003d\u0027feature-count\u0027\u003e1 scenario\u003c/span\u003e, \u003cspan class\u003d\u0027feature-count\u0027\u003e1 test case\u003c/span\u003e"]}],"selectable":false,"tags":["\u003ca href\u003d\u0027##beforetable\u0027\u003e\u003ci class\u003d\u0027bi bi-check-circle-fill success-icon \u0027 title\u003d\u0027SUCCESS\u0027\u003e\u003c/i\u003e\u003c/a\u003e","\u003cspan class\u003d\u0027feature-count\u0027\u003e6 features\u003c/span\u003e "]}];
+
+            $('#tree').treeview({
+                data: requirementsTree,
+                enableLinks: true,
+                levels: 10,
+                showTags: true,
+                expandIcon: "bi bi-journal-plus",
+                collapseIcon: "bi bi-journal-minus",
+                emptyIcon: "bi bi-journal"
+            });
+
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $(".scenario-docs > div > p").html(function () {
+                var text = $(this).text().trim().split(" ");
+                var first = text.shift();
+                return (text.length > 0 ? "<strong>" + first + "</strong> " : first) + text.join(" ");
+            });
+        });
+    </script>
+</head>
+
+
+<body class="results-page">
+<div id="topheader">
+    <div id="topbanner">
+        <div id="logo"><a href="index.html"><img src="images/serenity-logo.png" border="0"/></a></div>
+        <div id="projectname-banner" style="float:right">
+            <span class="projectname">
+                <span class="projecttitle">Serenity BDD Report</span>
+                <span class="projectsubtitle"></span>
+            </span>
+        </div>
+    </div>
+</div>
+
+
+<div class="middlecontent">
+    <div id="contenttop">
+        <div class="middlebg">
+            <span class="breadcrumbs">
+            <a href='index.html'>Home</a> > <a href="capabilities.html">Requirements</a>
+
+                > <a href="66f309951c5df95f731128d41c9449fdaf2c5a3fa4b78e82ba59a612d0421276.html">Api producto V1</a>
+
+
+                    > <span class="truncate-40">Base</span>
+
+            </span>
+        </div>
+        <div class="rightbg"></div>
+    </div>
+    <div class="clr"></div>
+
+    <!--/* starts second table*/-->
+
+<div>
+    <ul class="nav nav-tabs" role="tablist">
+        <li >
+            <a href="index.html"><i class="bi bi-journal-check"></i> Overall Test Results</a>
+        </li>
+        <li >
+            <a href="capabilities.html"><i class="bi bi-journal-text"></i> Requirements</a>
+        </li>
+        <li >
+            <a href="7ea0a5e2d679b9deeda9910ae4a9bcd3a281e0d908303a9e16e486103e98880c.html"><i class="bi bi-chat-text"></i> Capabilities</a>
+        </li>
+        <li class="active">
+            <a href="#"><i class="bi bi-chat-text"></i> Features</a>
+        </li>
+    </ul>
+    <span class="date-and-time"><a href="build-info.html"><i class="bi bi-info-circle"></i></a> Report generated 02-10-2024 19:38</span>
+    <br style="clear:left"/>
+</div>
+
+    <div class="clr"></div>
+
+    <div id="beforetable"></div>
+    <div id="results-dashboard">
+        <div class="table">
+            <div class=row">
+                <div class="col-sm-12">
+                    <div>
+                        <div clas="table">
+                            <div class="row">
+
+                                    <div class="col-sm-12">
+                                        <span>
+                                            <h2><i class="bi bi-book"></i> Feature: Base</h2>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="requirementNarrativeTitle">
+                                
+                            </div>
+
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-sm-12">
+
+                        <!-- Requirements result tabs -->
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#specs"><i class="bi bi-journal-text"></i> Specifications</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#results"><i class="bi bi-speedometer"></i> Test Results</a>
+                            </li>
+                        </ul>
+
+                        <!-- Specifications and Results tabs -->
+                        <div class="card border">
+                            <div class="tab-content" id="pills-tabContent">
+                                <div id="specs" class="tab-pane fade in active">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <h3>Feature Coverage By Scenario</h3>
+
+                                                <!-- REQUIREMENTS PIE CHART -->
+                                                    <div class="chart-container" style="position: relative; width:30vw">
+                                                        <canvas id="requirementChart" width="300" height="300"></canvas>
+                                                    </div>
+
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <h3>Requirements Overview</h3>
+
+                                                <div id="tree"></div>
+
+                                                <!-- STATS -->
+    <div>
+        <h3><i class="bi bi-speedometer2"></i> Key Statistics</h3>
+        <div>
+            <table class="table table-striped table-hover">
+                <tbody>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-card-checklist"></i> Number of Scenarios
+                    </td>
+                    <td>9</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-caret-right"></i> Total Number of Test Cases
+                    </td>
+                    <td>9</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-flag-fill"></i> Tests Started
+                    </td>
+                    <td>Oct 02, 2024 19:38:46</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-stop-circle"></i> Tests
+                        Finished
+                    </td>
+                    <td>Oct 02, 2024 19:38:51</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-stopwatch"></i> Total
+                        Duration
+                    </td>
+                    <td>4s</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-trophy"></i> Fastest Test
+                    </td>
+                    <td>44ms</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-skip-start"></i> Slowest
+                        Test
+                    </td>
+                    <td>3s</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-stopwatch"></i> Average
+                        Execution Time
+                    </td>
+                    <td>499ms</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-stopwatch-fill"></i> Total
+                        Execution Time
+                    </td>
+                    <td>4s</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+                                                <!-- END STATS -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="results" class="tab-pane fade">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <h3>Feature Coverage By Scenario</h3>
+                                                <!-- TEST RESULT PIE CHART -->
+                                                    <div class="chart-container" style="position: relative; width:30vw">
+                                                        <canvas id="resultChart" width="300" height="300"></canvas>
+                                                    </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <h4><i class="bi bi-check-square"></i> Test Outcomes</h4>
+                                                <!-- Severity bar chart -->
+                                                <div class="chart-container" style="position: relative; width:30vw">
+                                                    <canvas id="severityChart" width="300" height="300"></canvas>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                <h4><i class="bi bi-graph-up"></i> Test Performance</h4>
+
+                                                <!-- Duration bar chart -->
+                                                <div class="chart-container" style="position: relative; width:30vw">
+                                                    <canvas id="durationChart" width="300" height="300"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+    <div>
+        <h3><i class="bi bi-speedometer2"></i> Key Statistics</h3>
+        <div>
+            <table class="table table-striped table-hover">
+                <tbody>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-card-checklist"></i> Number of Scenarios
+                    </td>
+                    <td>9</td>
+                    <td>
+                        <i class="bi bi-stopwatch"></i> Total
+                        Duration
+                    </td>
+                    <td>4s</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-caret-right"></i> Total Number of Test Cases
+                    </td>
+                    <td>9</td>
+                    <td>
+                        <i class="bi bi-trophy"></i> Fastest Test
+                    </td>
+                    <td>44ms</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-person"></i> Number of Manual Test Cases
+                    </td>
+                    <td>0</td>
+                    <td>
+                        <i class="bi bi-skip-start"></i> Slowest
+                        Test
+                    </td>
+                    <td>3s</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-flag-fill"></i> Tests Started
+                    </td>
+                    <td>Oct 02, 2024 19:38:46</td>
+                    <td>
+                        <i class="bi bi-stopwatch"></i> Average
+                        Execution Time
+                    </td>
+                    <td>499ms</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-stop-circle"></i> Tests
+                        Finished
+                    </td>
+                    <td>Oct 02, 2024 19:38:51</td>
+                    <td>
+                        <i class="bi bi-stopwatch-fill"></i> Total
+                        Execution Time
+                    </td>
+                    <td>4s</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+                                                <h3><i class="bi bi-gear"></i> Automated Tests</h3>
+
+                                                    <table class="scenario-result-table table" id="scenario-results">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>feature</th>
+                                                            <th class="test-name-column">Scenario</th>
+                                                            <th>Context</th>
+                                                            <th>Steps</th>
+                                                            <th>Started</th>
+                                                            <th>Total Duration</th>
+                                                            <th>Result</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                                <tr class="scenario-result SUCCESS">
+                                                                    <td>
+                                                                            <a href="fb6ec528052fabdc9aae3aba445d5eca801ce80d9f62c40b6f97124599329093.html">Requisito 5. Actualizar un producto fallido previamente creado usando la api /api/v1/product/</a>
+                                                                    </td>
+                                                                    <td>
+                                                                            <a href="b18b929ad943b8d9f1075f6daa083f4c172c428ecff0d70185aff8b49ef3b731.html">Actualizar un producto fallido previamente creado de manera exitosa</a>
+                                                                    </td>
+                                                                    <td><span style="display:none"></span>
+                                                                    </td>
+                                                                    <td>8</td>
+                                                                    <td>19:38:46</td>
+                                                                    <td>3s 433ms</td>
+                                                                    <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="scenario-result SUCCESS">
+                                                                    <td>
+                                                                            <a href="d70d86df4cdf09046ba2950b67bb395ff16dc1c3578306e6d11ec4a74b0ea4da.html">Requisito 2. Actualizar un producto previamente creado usando la api /api/v1/product/</a>
+                                                                    </td>
+                                                                    <td>
+                                                                            <a href="51bb683e6d616735e496161aafba03458eec07d15e024bc8e6afcfdbcdbbd745.html">Actualizar un producto previamente creado de manera exitosa</a>
+                                                                    </td>
+                                                                    <td><span style="display:none"></span>
+                                                                    </td>
+                                                                    <td>13</td>
+                                                                    <td>19:38:50</td>
+                                                                    <td>379ms</td>
+                                                                    <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="scenario-result SUCCESS">
+                                                                    <td>
+                                                                            <a href="d5151225bd6c48fc81b94df7e74ef06e9fb29deff286e0db1b4e48333b12a523.html">Requisito 4. Error al crear nuevo producto usando la api /api/v1/product/</a>
+                                                                    </td>
+                                                                    <td>
+                                                                            <a href="255767c6c35b1ed5f344026737fe585164ba870385dfbd2a8077dea86d112f0d.html">Crear un nuevo producto de manera fallida descripcion</a>
+                                                                    </td>
+                                                                    <td><span style="display:none"></span>
+                                                                    </td>
+                                                                    <td>4</td>
+                                                                    <td>19:38:50</td>
+                                                                    <td>083ms</td>
+                                                                    <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="scenario-result SUCCESS">
+                                                                    <td>
+                                                                            <a href="d5151225bd6c48fc81b94df7e74ef06e9fb29deff286e0db1b4e48333b12a523.html">Requisito 4. Error al crear nuevo producto usando la api /api/v1/product/</a>
+                                                                    </td>
+                                                                    <td>
+                                                                            <a href="292a8b1356ca0b51761065dbeef941105b219ab53c30dfe2b72bf32a42f98dad.html">Crear un nuevo producto de manera fallida nombre</a>
+                                                                    </td>
+                                                                    <td><span style="display:none"></span>
+                                                                    </td>
+                                                                    <td>4</td>
+                                                                    <td>19:38:50</td>
+                                                                    <td>092ms</td>
+                                                                    <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="scenario-result SUCCESS">
+                                                                    <td>
+                                                                            <a href="d5151225bd6c48fc81b94df7e74ef06e9fb29deff286e0db1b4e48333b12a523.html">Requisito 4. Error al crear nuevo producto usando la api /api/v1/product/</a>
+                                                                    </td>
+                                                                    <td>
+                                                                            <a href="dbe5ee926c50d51358f04c923e0a352d433436b2924ab0e1bf44f8bfdba5aad4.html">Crear un nuevo producto de manera fallida precio</a>
+                                                                    </td>
+                                                                    <td><span style="display:none"></span>
+                                                                    </td>
+                                                                    <td>4</td>
+                                                                    <td>19:38:51</td>
+                                                                    <td>073ms</td>
+                                                                    <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="scenario-result SUCCESS">
+                                                                    <td>
+                                                                            <a href="58133d5bd5179c08a368ceba89c772ae50181f6387fadae766edeea8283fa21d.html">Requisito 1. Crear un nuevo producto usando la api /api/v1/product/</a>
+                                                                    </td>
+                                                                    <td>
+                                                                            <a href="6fa9a6d17e1656ce9d8dd4474ae37e16fd9043ea6b9c16c6c7a97cf1a3446498.html">Crear un nuevo producto de manera exitosa</a>
+                                                                    </td>
+                                                                    <td><span style="display:none"></span>
+                                                                    </td>
+                                                                    <td>4</td>
+                                                                    <td>19:38:51</td>
+                                                                    <td>074ms</td>
+                                                                    <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="scenario-result SUCCESS">
+                                                                    <td>
+                                                                            <a href="58133d5bd5179c08a368ceba89c772ae50181f6387fadae766edeea8283fa21d.html">Requisito 1. Crear un nuevo producto usando la api /api/v1/product/</a>
+                                                                    </td>
+                                                                    <td>
+                                                                            <a href="ef46c8acdb97a37600fe1acdd2196fe0cd065508c57d2a4140d2d47cffd6389d.html">Crear un nuevo producto aplicando pregunta para validar</a>
+                                                                    </td>
+                                                                    <td><span style="display:none"></span>
+                                                                    </td>
+                                                                    <td>2</td>
+                                                                    <td>19:38:51</td>
+                                                                    <td>044ms</td>
+                                                                    <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="scenario-result SUCCESS">
+                                                                    <td>
+                                                                            <a href="7904811ba75c2e59b671b2d24789ae7c714d3ecaebd84f5a7e4babe0d5deffd4.html">Requisito 6. Eliminar un producto Fallido previamente creado usando la api /api/v1/product/</a>
+                                                                    </td>
+                                                                    <td>
+                                                                            <a href="e3b652c156a3b39d92bff95486a6486bc1a5a7e7afa8514cdf4c70e614faccd1.html">Eliminar un producto previamente creado de manera exitosa</a>
+                                                                    </td>
+                                                                    <td><span style="display:none"></span>
+                                                                    </td>
+                                                                    <td>8</td>
+                                                                    <td>19:38:51</td>
+                                                                    <td>192ms</td>
+                                                                    <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="scenario-result SUCCESS">
+                                                                    <td>
+                                                                            <a href="0386cf54170f285b7617a24c182b968cf3fbf144cd6e8aa9f4aa945d679a6698.html">Requisito 3. Eliminar un producto previamente creado usando la api /api/v1/product/</a>
+                                                                    </td>
+                                                                    <td>
+                                                                            <a href="b621bdbefc42e8912f481e65835fadf4eee50bd87ea5f6cc787a3e2d674560ff.html">Eliminar un producto previamente creado de manera exitosa</a>
+                                                                    </td>
+                                                                    <td><span style="display:none"></span>
+                                                                    </td>
+                                                                    <td>8</td>
+                                                                    <td>19:38:51</td>
+                                                                    <td>126ms</td>
+                                                                    <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
+                                                                    </td>
+                                                                </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <h3><i class="bi bi-hand-index-thumb"></i> Manual Tests</h3>
+
+                                                    No manual tests were recorded
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <span class="version">Serenity BDD version 4.2.1</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Chart data -->
+    <!-- PIE CHART -->
+    <script>
+
+        // The results pie chart
+        const outcomeChartCtx = document.getElementById('resultChart');
+
+        // Options define for display value on top of bars
+        const outcomeDetailsReports = [
+            { title: 'Passing Test Cases', link: "e129172019e4d366e6c83d62eb1630c64d725ab38ce82b42c2601377d20abfc1.html" },
+            { title: 'Pending Test Cases', link: "50c5fc64009971bb39773ed610f1d0fb49243b5ed8cad98ceffa208a1c7a9580.html" },
+            { title: 'Ignored Test Cases', link: "3375824975763ce389f7cb364fecb3d8955daaf35fad2aa3435c146de3d08ac1.html" },
+            { title: 'Skipped Test Cases', link: "9298e21e8ca45cee25852f91ff40b861b7adadf56a787c3faa409ed6f7f4aadb.html" },
+            { title: 'Aborted Test Cases',  link: "55384b3c7b8ed7356da61ac16da06c47a6ce4c2a94475cd7310cc2df442aa7c2.html"},
+            { title: 'Failed Test Cases', link: "cf0358dda896a09fb8c9221155390abccea70b6c8595219f36319e532f076de6.html"  },
+            { title: 'Broken Test Cases', link: "2a807c6b605023663129a30187b433412dc75ef9d88761e121aa43bfd5586d2b.html"    },
+            { title: 'Compromised Test Cases',  link: "5eef3b53a56ef307b71cfe42c743ff2c175a9efa934c01e5687ed8421c20b595.html" },
+        ]
+        const outcomeData = {
+            labels: ['Passing Test Cases', 'Pending Test Cases', 'Ignored Test Cases', 'Skipped Test Cases', 'Aborted Test Cases', 'Failed Test Cases', 'Broken Test Cases', 'Compromised Test Cases','Undefined Test Cases'],
+            datasets: [{
+                label: 'Test Results',
+                fill: false,
+                data: [{meta: 'Passing tests', value: 9}, {meta: 'Pending tests', value: 0}, {meta: 'Ignored tests', value: 0}, {meta: 'Skipped tests', value: 0}, {meta: 'Aborted tests', value: 0}, {meta: 'Failing tests', value: 0}, {meta: 'Broken tests', value: 0}, {meta: 'Compromised tests', value: 0}],
+                backgroundColor: ['rgba(153,204,51,0.5)','rgba(165, 199, 238, 0.5)','rgba(168, 168, 168, 0.5)','rgba(238, 224, 152, 0.75)','rgba(255, 153, 102, 0.5)','rgba(255, 22, 49, 0.5)','rgba(255, 97, 8, 0.5)','rgba(255, 104, 255, 0.5)','rgba(83, 50, 168, 0.5)'],
+                borderColor: ['rgba(153,204,51,1)','rgba(165, 199, 238, 1)','rgba(168, 168, 168, 1)','rgba(238, 224, 152, 1)','rgba(255, 153, 102, 1)','rgba(255, 22, 49, 1)','rgba(255, 97, 8, 1)','rgba(255, 104, 255, 1)','rgba(83, 50, 168, 1)'],
+                borderWidth: 1,
+            }]
+        }
+        const outcomeOptions = {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom'
+                },
+                // Change options for ALL labels of THIS CHART
+                datalabels: {
+                    color: '#444444',
+                    'font.weight': 'bold',
+                    formatter: (value, ctx) => {
+                        let sum = 0;
+                        let dataArr = ctx.chart.data.datasets[0].data;
+                        dataArr.map(data => {
+                            sum += data;
+                        });
+                        let percentage = (value * 100 / sum).toFixed(0) + "%";
+                        if (percentage === '0%' || percentage === 'NaN%') {
+                            return '';
+                        } else {
+                            return percentage;
+                        }
+                    },
+                },
+            }
+        }
+
+        const outcomeChart = new Chart(outcomeChartCtx, {
+            type: 'doughnut',
+            data: outcomeData,
+            options: outcomeOptions,
+            plugins: [
+                {
+                    id: 'text',
+                    beforeDraw: function (chart, a, b) {
+                        var width = chart.width,
+                            height = chart.height,
+                            ctx = chart.ctx;
+
+                        ctx.restore();
+                        var fontSize = (height / 200).toFixed(1);
+                        ctx.font = fontSize + "em sans-serif";
+                        ctx.textBaseline = "middle";
+
+                        var text = "100%"
+                        textX = 10 + Math.round((width - ctx.measureText(text).width) / 2);
+                        textY = (height / 2) - 40;
+
+                        ctx.fillText(text, textX, textY);
+                        ctx.save();
+                    }
+                }]
+        });
+
+        function clickHandler(click) {
+            const points = outcomeChart.getElementsAtEventForMode(click, 'nearest', {intersect: true}, true);
+            if (points.length) {
+                const firstPoint = points[0];
+                window.open(outcomeDetailsReports[firstPoint.index].link, "_self")
+
+            }
+        }
+        outcomeChartCtx.onclick = clickHandler;
+    </script>
+    <!-- END PIE CHART -->
+    <!-- PIE CHART -->
+    <script>
+
+        // The results pie chart
+        const requirementsChartCtx = document.getElementById('requirementChart');
+
+        // Options define for display value on top of bars
+        const requirementsOutcomeDetailsReports = [
+            { title: 'Passing Test Cases', link: "e129172019e4d366e6c83d62eb1630c64d725ab38ce82b42c2601377d20abfc1.html" },
+            { title: 'Pending Test Cases', link: "50c5fc64009971bb39773ed610f1d0fb49243b5ed8cad98ceffa208a1c7a9580.html" },
+            { title: 'Ignored Test Cases', link: "3375824975763ce389f7cb364fecb3d8955daaf35fad2aa3435c146de3d08ac1.html" },
+            { title: 'Skipped Test Cases', link: "9298e21e8ca45cee25852f91ff40b861b7adadf56a787c3faa409ed6f7f4aadb.html" },
+            { title: 'Aborted Test Cases',  link: "55384b3c7b8ed7356da61ac16da06c47a6ce4c2a94475cd7310cc2df442aa7c2.html"},
+            { title: 'Failed Test Cases', link: "cf0358dda896a09fb8c9221155390abccea70b6c8595219f36319e532f076de6.html"  },
+            { title: 'Broken Test Cases', link: "2a807c6b605023663129a30187b433412dc75ef9d88761e121aa43bfd5586d2b.html"    },
+            { title: 'Compromised Test Cases',  link: "5eef3b53a56ef307b71cfe42c743ff2c175a9efa934c01e5687ed8421c20b595.html" },
+            { title: 'Undefined Test Cases',  link: "" },
+        ]
+        const requirementsOutcomeData = {
+            labels: ['Passing Test Cases', 'Pending Test Cases', 'Ignored Test Cases', 'Skipped Test Cases', 'Aborted Test Cases', 'Failed Test Cases', 'Broken Test Cases', 'Compromised Test Cases','Undefined Test Cases'],
+            datasets: [{
+                label: 'Feature Coverage',
+                fill: false,
+                data: [{meta: 'Passing tests', value: 9}, {meta: 'Pending tests', value: 0}, {meta: 'Ignored tests', value: 0}, {meta: 'Skipped tests', value: 0}, {meta: 'Aborted tests', value: 0}, {meta: 'Failing tests', value: 0}, {meta: 'Broken tests', value: 0}, {meta: 'Compromised tests', value: 0}],
+                backgroundColor: ['rgba(153,204,51,0.5)','rgba(165, 199, 238, 0.5)','rgba(168, 168, 168, 0.5)','rgba(238, 224, 152, 0.75)','rgba(255, 153, 102, 0.5)','rgba(255, 22, 49, 0.5)','rgba(255, 97, 8, 0.5)','rgba(255, 104, 255, 0.5)','rgba(83, 50, 168, 0.5)'],
+                borderColor: ['rgba(153,204,51,1)','rgba(165, 199, 238, 1)','rgba(168, 168, 168, 1)','rgba(238, 224, 152, 1)','rgba(255, 153, 102, 1)','rgba(255, 22, 49, 1)','rgba(255, 97, 8, 1)','rgba(255, 104, 255, 1)','rgba(83, 50, 168, 1)'],
+                borderWidth: 1,
+            }]
+        }
+        const requirementsOutcomeOptions = {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom'
+                },
+                // Change options for ALL labels of THIS CHART
+                datalabels: {
+                    color: '#444444',
+                    'font.weight': 'bold',
+                    formatter: (value, ctx) => {
+                        let sum = 0;
+                        let dataArr = ctx.chart.data.datasets[0].data;
+                        dataArr.map(data => {
+                            sum += data;
+                        });
+                        let percentage = (value * 100 / sum).toFixed(0) + "%";
+                        if (percentage === '0%' || percentage === 'NaN%') {
+                            return '';
+                        } else {
+                            return percentage;
+                        }
+                    },
+                },
+            }
+        }
+
+        const requirementsChart = new Chart(requirementsChartCtx, {
+            type: 'doughnut',
+            data: requirementsOutcomeData,
+            options: requirementsOutcomeOptions,
+            plugins: [
+                {
+                    id: 'text',
+                    beforeDraw: function (chart, a, b) {
+                        var width = chart.width,
+                            height = chart.height,
+                            ctx = chart.ctx;
+
+                        ctx.restore();
+                        var fontSize = (height / 200).toFixed(1);
+                        ctx.font = fontSize + "em sans-serif";
+                        ctx.textBaseline = "middle";
+
+                        var text = "100%"
+                        textX = 10 + Math.round((width - ctx.measureText(text).width) / 2);
+                        textY = (height / 2) - 40;
+
+                        ctx.fillText(text, textX, textY);
+                        ctx.save();
+                    }
+                }]
+        });
+
+        function reqsClickHandler(click) {
+            const points = requirementsChart.getElementsAtEventForMode(click, 'nearest', {intersect: true}, true);
+            if (points.length && requirementsOutcomeDetailsReports[firstPoint.index].link) {
+                const firstPoint = points[0];
+                window.open(requirementsOutcomeDetailsReports[firstPoint.index].link, "_self")
+
+            }
+        }
+        requirementsChartCtx.onclick = reqsClickHandler;
+    </script>
+    <!-- END PIE CHART -->
+
+    <!-- SUMMARY BAR CHART -->
+    <script>
+
+        // The Severity bar chart
+        const severityChartCtx = document.getElementById('severityChart');
+
+        // Options define for display value on top of bars
+
+        const severityDetailsReports = [
+            { title: 'Passing Scenarios', link: "e129172019e4d366e6c83d62eb1630c64d725ab38ce82b42c2601377d20abfc1.html" },
+            { title: 'Pending Scenarios', link: "50c5fc64009971bb39773ed610f1d0fb49243b5ed8cad98ceffa208a1c7a9580.html" },
+            { title: 'Ignored Scenarios', link: "3375824975763ce389f7cb364fecb3d8955daaf35fad2aa3435c146de3d08ac1.html" },
+            { title: 'Skipped Scenarios', link: "9298e21e8ca45cee25852f91ff40b861b7adadf56a787c3faa409ed6f7f4aadb.html" },
+            { title: 'Aborted Scenarios',  link: "55384b3c7b8ed7356da61ac16da06c47a6ce4c2a94475cd7310cc2df442aa7c2.html"},
+            { title: 'Failed Scenarios', link: "cf0358dda896a09fb8c9221155390abccea70b6c8595219f36319e532f076de6.html"  },
+            { title: 'Broken Scenarios', link: "2a807c6b605023663129a30187b433412dc75ef9d88761e121aa43bfd5586d2b.html"    },
+            { title: 'Compromised Scenarios',  link: "5eef3b53a56ef307b71cfe42c743ff2c175a9efa934c01e5687ed8421c20b595.html" },
+        ]
+        const severityData = {
+            labels: ['Passing', 'Pending', 'Ignored', 'Skipped', 'Aborted', 'Failed', 'Broken', 'Compromised'],
+            datasets: [
+                {
+                    label: 'Automated',
+                    data: [9,0,0,0,0,0,0,0],
+                    backgroundColor: ['rgba(153,204,51,0.5)','rgba(165, 199, 238, 0.5)','rgba(168, 168, 168, 0.5)','rgba(238, 224, 152, 0.75)','rgba(255, 153, 102, 0.5)','rgba(255, 22, 49, 0.5)','rgba(255, 97, 8, 0.5)','rgba(255, 104, 255, 0.5)','rgba(83, 50, 168, 0.5)'],
+                    borderColor: ['rgba(153,204,51,1)','rgba(165, 199, 238, 1)','rgba(168, 168, 168, 1)','rgba(238, 224, 152, 1)','rgba(255, 153, 102, 1)','rgba(255, 22, 49, 1)','rgba(255, 97, 8, 1)','rgba(255, 104, 255, 1)','rgba(83, 50, 168, 1)'],
+                    borderWidth: 1
+                },
+                {
+                    label: 'Manual',
+                    data: [0,0,0,0,0,0,0,0],
+                    backgroundColor: ['rgba(153,204,51,0.25)','rgba(165, 199, 238, 0.25)','rgba(168, 168, 168, 0.25)','rgba(238, 224, 152, 0.375)','rgba(255, 153, 102, 0.25)','rgba(255, 22, 49, 0.25)','rgba(255, 97, 8, 0.25)','rgba(255, 104, 255, 0.25)','rgba(83, 50, 168, 0.25)'],
+                    borderColor: ['rgba(153,204,51,1)','rgba(165, 199, 238, 1)','rgba(168, 168, 168, 1)','rgba(238, 224, 152, 1)','rgba(255, 153, 102, 1)','rgba(255, 22, 49, 1)','rgba(255, 97, 8, 1)','rgba(255, 104, 255, 1)','rgba(83, 50, 168, 1)'],
+                    borderWidth: 1
+                },
+
+            ]
+        }
+        const severityOptions = {
+            responsive: true,
+            skipNull: true,
+            scales: {
+                x: {
+                    stacked: true,
+                },
+                y: {
+                    stacked: true,
+                }
+            },
+            plugins: {
+                // Change options for ALL labels of THIS CHART
+                datalabels: {
+                    color: '#444444',
+                    'font.weight': 'bold',
+                    formatter: (value, ctx) => {
+                        if (value === 0) {
+                            return '';
+                        } else {
+                            return value;
+                        }
+                    },
+                }
+            }
+        }
+        const severityChart = new Chart(severityChartCtx, {
+            type: 'bar',
+            data: severityData,
+            options: severityOptions
+        });
+
+        function clickHandler(click) {
+            const points = severityChart.getElementsAtEventForMode(click, 'nearest', {intersect: true}, true);
+            if (points.length) {
+                const firstPoint = points[0];
+                window.open(severityDetailsReports[firstPoint.index].link, "_self")
+
+            }
+        }
+        severityChartCtx.onclick = clickHandler;
+    </script>
+    <!-- END SUMMARY CHART -->
+
+    <!-- DURATION CHART -->
+    <script>
+
+        // Options define for display value on top of bars
+        const durationDetailsReports = [
+                {title: "Under 1 second", link: "90ef7509a43e7da0cef14283b1586a72e7381fcc6da9110eb0b887acf4fb32c2.html"},
+                {title: "1 to 10 seconds", link: "a08cd5882932ae2a6862ea995c3f9e9d7ef5ee28be58195cb50debdaed1916c6.html"},
+                {title: "10 to 30 seconds", link: "5425ca2e21778f88ab106b7dc78363725a73bfa1e1ab54d43d2e6b401326527b.html"},
+                {title: "30 to 60 seconds", link: "cf441c99d015da61f5a99310729ec68a071433d844b05d101791b6aeb1229b60.html"},
+                {title: "1 to 2 minutes", link: "6b36c374cc3fcba97ecfdd828593394f7cf5ac07cbdcc96895efda34c6ee2700.html"},
+                {title: "2 to 5 minutes", link: "f5ae31a1ea4ab6795e1103d30f6c3a15a662a9abf21d59041b9cebc13ad1932b.html"},
+                {title: "5 to 10 minutes", link: "4047bdd15f7a7789087b1b6ea2124fb9072917c8219ea58ae4ace60e063d2bb0.html"},
+                {title: "10 minutes or over", link: "b38ee6d11e00005e2878b4ce7b7b4636ba133d76de8f5b8eb35d15bb2222a48f.html"},
+        ]
+        // The Severity bar chart
+        const durationChartCtx = document.getElementById('durationChart');
+
+        // Options define for display value on top of bars
+
+        const durationData = {
+            labels: ['Under 1 second','1 to 10 seconds','10 to 30 seconds','30 to 60 seconds','1 to 2 minutes','2 to 5 minutes','5 to 10 minutes','10 minutes or over'],
+            datasets: [{
+                label: 'Number of tests per duration',
+                fill: false,
+                data: ['8','1','0','0','0','0','0','0'],
+                backgroundColor: 'rgba(83, 146, 255,0.5)',
+                borderColor: 'rgba(83, 146, 255, 1)',
+            }]
+        }
+        const durationOptions = {
+            responsive: true,
+            plugins: {
+                // Change options for ALL labels of THIS CHART
+                datalabels: {
+                    color: '#444444',
+                    'font.weight': 'bold',
+                    formatter: (value, ctx) => {
+                        if (value > 0) {
+                            return value;
+                        } else {
+                            return '';
+                        }
+                    },
+                },
+                tooltip: {
+                    enabled: true,
+                    usePointStyle: true,
+                    callbacks: {
+                        label: (data) => {
+                            return data.parsed.y + ' tests'
+                        }
+                    },
+                },
+            },
+        }
+
+        const durationChart = new Chart(durationChartCtx, {
+            type: 'bar',
+            data: durationData,
+            options: durationOptions
+        });
+
+        function durationClickHandler(click) {
+            const points = durationChart.getElementsAtEventForMode(click, 'nearest', {intersect: true}, true);
+            if (points.length) {
+                const firstPoint = points[0];
+                window.open(durationDetailsReports[firstPoint.index].link, "_self")
+
+            }
+        }
+
+        durationChartCtx.onclick = durationClickHandler;
+    </script>
+    <!-- END DURATION CHART -->
+</body>
+</html>
